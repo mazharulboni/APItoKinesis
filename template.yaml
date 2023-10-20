@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  An Amazon Kinesis Firehose stream processor that converts input records from RFC3164 Syslog format to CSV.
+
+Resources:
+  kinesisfirehosesyslogtocsvpython:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: kinesis.lambda_handler
+      Runtime: python3.11
+      CodeUri: kinesis_transformer/
+      Description: >-
+        An Amazon Kinesis Firehose stream processor that converts input records from RFC3164 Syslog format to CSV.
+      MemorySize: 128
+      Timeout: 30
+  kinesisOutputPostProcessor:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: post_processor.lambda_handler
+      Runtime: python3.11
+      CodeUri: kinesis_transformer/
+      Description: >-
+        An Amazon Kinesis Firehose stream output object internal copy to changedata/
+      MemorySize: 128
+      Timeout: 30
